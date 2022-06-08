@@ -1,0 +1,153 @@
+<head>
+	<title>Kuis</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/custom.css" rel="stylesheet">
+	<style>
+	.well2{
+		background-color:#6600FF;
+		color : white;
+		text-align:center;
+		padding :5px 0px 0px 0px;
+	}
+
+	</style>
+</head>
+<?php 
+session_start();
+$_SESSION['status'] = 'sudah';
+include "config.php";
+$jawaban = $_POST;
+// echo "<pre>";
+// print_r($jawaban);
+// echo "</pre>";
+
+$result = mysql_query("SELECT * FROM soal");
+	if($result === FALSE){die (mysql_error());}
+	$benar = 0;
+	$salah = 0;
+	$kosong = 0;
+	$soal = 0; ?>
+
+	<div class="container">
+	<div class="col-md-2">
+	</div>
+  <div class="col-md-8 col-sm-8">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Resume Hasil Nilai Anda</div>
+        <div class="panel-body">
+            <div class="bs-callout bs-callout-danger">
+    <?php
+	error_reporting(0);
+	while ($data = mysql_fetch_array ($result)){
+		$soal++;
+			if ($data['kunci'] == $jawaban['soal_'.$soal]) {
+			$benar++;
+			}else if($jawaban['soal_'.$soal] == NULL){
+				$kosong++;
+			}else{
+			$salah++;
+			}
+		}$total = $benar*2.94;
+		?>
+		<div class="col-md-4">
+		<br>
+		<br>
+		<br>
+		<div class="Well">
+		<h6><img src="img/smkn5batam.jpg" class="img img-thumbnail"></h6>
+		</div>
+		<div class="Well">
+		<h6><img src="img/logo-tutwuri.png" class="img img-thumbnail"></h6>
+		</div>
+		</div>
+
+		<div class="col-md-8">
+		<div class="well">
+		<ul class="list-unstyled detail-user text-center">
+			<li class="list-group-item"><?php echo "<b>Nama ". $_SESSION['nama']."</b><br>";?></li>
+			<li class="list-group-item" ><?php echo "<b>Nisp ". $_SESSION['nisp']."</b>"; ?></li>
+			<li class="list-group-item" ><?php echo "<b>Asal Sekolah ". $_SESSION['asal_sekolah']."</b>"; ?></li>
+		</ul>
+	               
+						<div class="col-md-6">
+							<div class="well2">
+								
+									<i class="fa fa-edit fa-3x"></i>
+									<p>Benar </p>
+								
+								<div class="back-footer-green">
+									<p class="lead"><?php echo $benar ?></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="well2">
+								
+									<i class="fa fa-edit fa-3x"></i>
+									<p>Salah</p>
+								
+								<div class="back-footer-red">
+									<p class="lead"><?php echo $salah ?></p>
+									
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+						&nbsp
+						</div>
+						<div class="col-md-12">
+							<div class="well2">
+								
+									<i class="fa fa-edit fa-3x"></i>
+									<p>Total Nilai Anda</p>
+								
+								<div class="back-footer-blue">
+									<p class="lead"><?php echo $total ?></p>
+									
+								</div>
+							</div>
+						</div>
+
+
+		
+					
+		<?php
+if ($total <= 6000000000000) {
+  //echo "<BR>enam kebawah";
+  echo "<div align='center'><b>&copy;SMK Negeri 5 Batam</b></div>";
+}else{
+  //echo "<br>memuaskan";
+};
+?>
+<a href="index.php" class="btn btn-primary btn-lg btn-block" name="selesai">Selesai Review</a>
+			</div>
+			
+		</div>
+		
+	</div>
+	
+ </div>
+	
+  </div>
+  
+</div>
+ <?php
+$nama  = $_SESSION['nama'];
+$nisp = $_SESSION['nisp'];
+$asal_sekolah = $_SESSION['asal_sekolah'];
+$tanggal = date("H:i d M	Y");
+$cetak = 'belum';
+$query = mysql_query("INSERT INTO calon_siswa VALUES('','$nama','$nisp','$asal_sekolah','$total','$tanggal','$cetak')");
+session_destroy();
+if(!$query){
+echo "something wong";
+echo die(mysql_error());
+}else{
+//echo "<script>document.location='index.php'</script>";
+
+}
+?>
+
+
+	<script src="js/jquery-2.1.1.min.js"></script>

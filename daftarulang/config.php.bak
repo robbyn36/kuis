@@ -1,0 +1,8 @@
+<?php
+$HOST = "localhost";
+$USER_NAME = "root";
+$PASSWORD = "";
+$DB = "db_kuis";
+mysql_connect($HOST,$USER_NAME,$PASSWORD);
+mysql_select_db($DB);
+?>
